@@ -1,0 +1,5 @@
+include fpzip-1.2.0/inc/*.h
+include fpzip-1.2.0/src/*.cpp
+include fpzip-1.2.0/LICENSING
+include fpzip-1.2.0/README
+include README.md
