@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/fpzip.svg)](https://badge.fury.io/py/fpzip)
+
 # fpzip
 
 Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. 
