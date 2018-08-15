@@ -2,7 +2,7 @@
 
 # fpzip
 
-Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. 
+Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. Python 2.7 and Python 3+ are supported.
 
 ```python
 import fpzip
@@ -15,19 +15,19 @@ data_again = fpzip.decompress(compressed_bytes) # 3d or 4d float or double array
 
 ## Installation
 
-*Python 3 support only. Requires C++ compiler.*
+*Requires C++ compiler.*
 
 `pip` Installation  
 
 ```bash
-pip3 install fpzip
+pip install fpzip
 ```
 
 Direct Installation
 
 ```bash
-$ pip3 install numpy
-$ python3 setup.py develop
+$ pip install numpy
+$ python setup.py develop
 ```
 
 ## References

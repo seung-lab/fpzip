@@ -1,5 +1,6 @@
 from libc.stdio cimport FILE, fopen, fwrite, fclose
 from libc.stdlib cimport calloc, free
+from libc.stdint cimport uint8_t
 from cpython cimport array 
 import array
 import sys
@@ -9,8 +10,6 @@ cimport numpy as numpy
 import numpy as np
 
 __VERSION__ = '1.2.0'
-
-SUPPORTED_PYTHON_VERSION = (sys.version_info[0] == 3)
 
 FPZ_ERROR_STRINGS = [
   "success",
@@ -75,9 +74,6 @@ def compress(data, precision=0):
   Takes a 3d or 4d numpy array of floats or doubles and returns
   a compressed bytestring.
   """
-  if not SUPPORTED_PYTHON_VERSION:
-    raise NotImplementedError("This fpzip extension only supports Python 3.")
-
   assert data.dtype in (np.float32, np.float64)
 
   if len(data.shape) == 3:
@@ -119,18 +115,27 @@ def compress(data, precision=0):
   cdef double[:,:,:,:] arr_memviewd
   cdef size_t outbytes
 
+  cdef float[:] bufviewf
+  cdef double[:] bufviewd
+
   if data.dtype == np.float32:
     arr_memviewf = data
     outbytes = fpzip_write(fpz_ptr, <void*>&arr_memviewf[0,0,0,0])
+    bufviewf = compression_buf
+    bytes_out = bytearray(bufviewf[:outbytes])
   else:
     arr_memviewd = data
     outbytes = fpzip_write(fpz_ptr, <void*>&arr_memviewd[0,0,0,0])
+    bufviewd = compression_buf
+    bytes_out = bytearray(bufviewd[:outbytes])
    
   if outbytes == 0:
     raise FpzipWriteError("Compression failed. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
   fpzip_write_close(fpz_ptr)
-  return bytes(compression_buf)[:outbytes] 
+
+  del compression_buf
+  return bytes(bytes_out)
 
 def decompress(bytes encoded):
   """
@@ -139,9 +144,6 @@ def decompress(bytes encoded):
   Accepts an fpzip encoded bytestring (e.g. b'fpy)....') and 
   returns the 4d numpy array that generated it.
   """
-  if not SUPPORTED_PYTHON_VERSION:
-    raise NotImplementedError("This fpzip extension only supports Python 3.")
-  
   # line below necessary to convert from PyObject to a naked pointer
   cdef unsigned char *encodedptr = <unsigned char*>encoded 
   cdef FPZ* fpz_ptr = fpzip_read_from_buffer(<void*>encodedptr)
