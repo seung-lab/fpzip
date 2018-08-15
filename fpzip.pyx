@@ -106,10 +106,6 @@ def compress(data, precision=0):
   if fpzip_write_header(fpz_ptr) == 0:
     raise FpzipWriteError("Cannot write header. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
-  if data.size == 0:
-    fpzip_write_close(fpz_ptr)
-    return bytes(compression_buf)[:header_bytes] 
-
   # can't get raw ptr from numpy object directly, implicit magic
   cdef float[:,:,:,:] arr_memviewf
   cdef double[:,:,:,:] arr_memviewd
@@ -117,6 +113,16 @@ def compress(data, precision=0):
 
   cdef float[:] bufviewf
   cdef double[:] bufviewd
+
+  if data.size == 0:
+    fpzip_write_close(fpz_ptr)
+    if data.dtype == np.float32:
+      bufviewf = compression_buf
+      bytes_out = bytearray(bufviewf[:header_bytes])  
+    else:
+      bufviewd = compression_buf
+      bytes_out = bytearray(bufviewd[:header_bytes])  
+    return bytes(bytes_out)
 
   if data.dtype == np.float32:
     arr_memviewf = data
