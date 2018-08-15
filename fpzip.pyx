@@ -63,7 +63,7 @@ class FpzipReadError(FpzipError):
   pass
 
 cpdef allocate(typecode, ct):
-  cdef array.array array_template = array.array(typecode, [])
+  cdef array.array array_template = array.array(chr(typecode), [])
   # create an array with 3 elements with same type as template
   return array.clone(array_template, ct, zero=True)
 
@@ -83,11 +83,11 @@ def compress(data, precision=0):
 
   header_bytes = 28 # read.cpp:fpzip_read_header + 4 for some reason
 
-  fptype = 'f' if data.dtype == np.float32 else 'd'
+  cdef char fptype = b'f' if data.dtype == np.float32 else b'd'
   cdef array.array compression_buf = allocate(fptype, data.size + header_bytes)
 
   cdef FPZ* fpz_ptr
-  if fptype == 'f':
+  if fptype == b'f':
     fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_floats, data.nbytes + header_bytes)
   else:
     fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_doubles, data.nbytes + header_bytes)
@@ -157,13 +157,13 @@ def decompress(bytes encoded):
   if fpzip_read_header(fpz_ptr) == 0:
     raise FpzipReadError("cannot read header: %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
-  fptype = 'f' if fpz_ptr[0].type == 0 else 'd'
+  cdef char fptype = b'f' if fpz_ptr[0].type == 0 else b'd'
   nx, ny, nz, nf = fpz_ptr[0].nx, fpz_ptr[0].ny, fpz_ptr[0].nz, fpz_ptr[0].nf
 
   cdef array.array buf = allocate(fptype, nx * ny * nz * nf)
 
   cdef size_t read_bytes = 0;
-  if fptype == 'f':
+  if fptype == b'f':
     read_bytes = fpzip_read(fpz_ptr, buf.data.as_floats)
   else:
     read_bytes = fpzip_read(fpz_ptr, buf.data.as_doubles)
@@ -173,7 +173,7 @@ def decompress(bytes encoded):
 
   fpzip_read_close(fpz_ptr)
 
-  dtype = np.float32 if fptype == 'f' else np.float64
+  dtype = np.float32 if fptype == b'f' else np.float64
   return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order='F')
 
 
