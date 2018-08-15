@@ -1,4 +1,4 @@
-[![PyPI version](https://badge.fury.io/py/fpzip.svg)](https://badge.fury.io/py/fpzip)
+[![Build Status](https://travis-ci.org/seung-lab/fpzip.svg?branch=master)](https://travis-ci.org/seung-lab/fpzip) [![PyPI version](https://badge.fury.io/py/fpzip.svg)](https://badge.fury.io/py/fpzip)
 
 # fpzip
 
