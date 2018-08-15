@@ -1,0 +1,9 @@
+CHANGES
+=======
+
+1.0.0
+-----
+
+* docs: formatting, link to fpzip site
+* init: fpzip cython bindings w/ installation procedure
+* Initial commit

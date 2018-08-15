@@ -115,9 +115,17 @@ def compress(data, precision=0):
     return bytes(compression_buf)[:header_bytes] 
 
   # can't get raw ptr from numpy object directly, implicit magic
-  # float or double shouldn't matter since we're about to cast to void pointer
-  cdef float[:,:,:,:] arr_memview = data 
-  cdef size_t outbytes = fpzip_write(fpz_ptr, <void*>&arr_memview[0,0,0,0])
+  cdef float[:,:,:,:] arr_memviewf
+  cdef double[:,:,:,:] arr_memviewd
+  cdef size_t outbytes
+
+  if data.dtype == np.float32:
+    arr_memviewf = data
+    outbytes = fpzip_write(fpz_ptr, <void*>&arr_memviewf[0,0,0,0])
+  else:
+    arr_memviewd = data
+    outbytes = fpzip_write(fpz_ptr, <void*>&arr_memviewd[0,0,0,0])
+   
   if outbytes == 0:
     raise FpzipWriteError("Compression failed. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
