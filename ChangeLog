@@ -1,6 +1,26 @@
 CHANGES
 =======
 
+* chore: update setup.cfg with Python2 classifiers
+
+1.0.2
+-----
+
+* fix: typecode intepretation error in Python2
+* test: install numpy first
+* docs: Travis badge
+* test: added travis and tests for zero size arrays
+* fix: python2 support for size 0 arrays
+
+1.0.1
+-----
+
+* feat: python2 support
+* fix: double precision now working
+* docs: added PyPI badge
+* docs: documented version independence and Python3 only
+* fix: corrected whitespace error in classifier
+
 1.0.0
 -----
 
