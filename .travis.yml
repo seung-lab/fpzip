@@ -11,12 +11,10 @@ install:
 - if [[ $PYTHON_MAJOR_VERSION == 2 ]]; then virtualenv venv; fi
 - if [[ $PYTHON_MAJOR_VERSION == 3 ]]; then virtualenv -p python3 venv; fi
 - source venv/bin/activate
-- if [[ $PYTHON_MAJOR_VERSION == 2 ]]; then pip install -r requirements.txt; fi
-- if [[ $PYTHON_MAJOR_VERSION == 3 ]]; then pip3 install -r requirements.txt; fi
-- if [[ $PYTHON_MAJOR_VERSION == 2 ]]; then pip install -e .; pip install pytest; fi
-- if [[ $PYTHON_MAJOR_VERSION == 3 ]]; then pip3 install -e .; pip3 install pytest; fi
-- if [[ $PYTHON_MAJOR_VERSION == 2 ]]; then python setup.py sdist; fi
-- if [[ $PYTHON_MAJOR_VERSION == 3 ]]; then python3 setup.py sdist bdist_wheel --universal; fi
+- if [[ $PYTHON_MAJOR_VERSION == 2 ]]; then pip  install -e .; pip install numpy pytest; fi
+- if [[ $PYTHON_MAJOR_VERSION == 3 ]]; then pip3 install -e .; pip3 install numpy pytest; fi
+- if [[ $PYTHON_MAJOR_VERSION == 2 ]]; then python  setup.py develop; fi
+- if [[ $PYTHON_MAJOR_VERSION == 3 ]]; then python3 setup.py develop; fi
 script:
-- if [[ $PYTHON_MAJOR_VERSION == 2 ]]; then py.test -v -x test.py; fi
+- if [[ $PYTHON_MAJOR_VERSION == 2 ]]; then python  -m pytest -v -x test.py; fi
 - if [[ $PYTHON_MAJOR_VERSION == 3 ]]; then python3 -m pytest -v -x test.py; fi
