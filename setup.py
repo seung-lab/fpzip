@@ -26,7 +26,6 @@ sources += [ 'fpzip.cpp' ]
 setuptools.setup(
   setup_requires=[ 'pbr', 'numpy' ],
   install_requires=[ 'numpy' ],
-  version='0.1',
   cmdclass={'build_ext':build_ext},
   extras_require={
     ':python_version == "2.7"': ['futures'],
