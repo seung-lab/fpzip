@@ -19,7 +19,10 @@ data_again = fpzip.decompress(compressed_bytes) # 3d or 4d float or double array
 
 `pip` Installation  
 
+Unfortunately, it's necessary to install numpy first because of a quirk in the Python installation procedure that won't easily recognize when a numpy installation completes in the same process. There are some hacks, but I haven't gotten them to work.
+
 ```bash
+pip install numpy
 pip install fpzip
 ```
 
