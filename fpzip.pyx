@@ -146,10 +146,14 @@ def compress(data, precision=0):
 
 def decompress(bytes encoded, order='C'):
   """
-  fpzip.decompress(encoded)
+  fpzip.decompress(encoded, order='C')
 
   Accepts an fpzip encoded bytestring (e.g. b'fpy)....') and 
   returns the 4d numpy array that generated it.
+
+  order is 'C' or 'F' (row major vs column major memory layout) and 
+  should correspond to the byte order of the originally compressed
+  array.
   """
   # line below necessary to convert from PyObject to a naked pointer
   cdef unsigned char *encodedptr = <unsigned char*>encoded 
