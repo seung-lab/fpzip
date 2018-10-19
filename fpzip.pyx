@@ -79,8 +79,6 @@ def compress(data, precision=0):
   if len(data.shape) == 3:
     data = data[:,:,:, np.newaxis ]
 
-  data = np.asfortranarray(data)
-
   header_bytes = 28 # read.cpp:fpzip_read_header + 4 for some reason
 
   cdef char fptype = b'f' if data.dtype == np.float32 else b'd'
@@ -143,7 +141,7 @@ def compress(data, precision=0):
   del compression_buf
   return bytes(bytes_out)
 
-def decompress(bytes encoded):
+def decompress(bytes encoded, order='C'):
   """
   fpzip.decompress(encoded)
 
@@ -174,6 +172,6 @@ def decompress(bytes encoded):
   fpzip_read_close(fpz_ptr)
 
   dtype = np.float32 if fptype == b'f' else np.float64
-  return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order='F')
+  return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order=order)
 
 
