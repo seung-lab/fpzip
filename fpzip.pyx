@@ -76,10 +76,11 @@ def compress(data, precision=0):
   """
   assert data.dtype in (np.float32, np.float64)
 
+  if not (data.flags['C_CONTIGUOUS'] or data.flags['F_CONTIGUOUS']):
+    data = np.ascontiguousarray(data)
+
   if len(data.shape) == 3:
     data = data[:,:,:, np.newaxis ]
-
-  data = np.asfortranarray(data)
 
   header_bytes = 28 # read.cpp:fpzip_read_header + 4 for some reason
 
@@ -143,7 +144,7 @@ def compress(data, precision=0):
   del compression_buf
   return bytes(bytes_out)
 
-def decompress(bytes encoded):
+def decompress(bytes encoded, order='C'):
   """
   fpzip.decompress(encoded)
 
@@ -174,6 +175,6 @@ def decompress(bytes encoded):
   fpzip_read_close(fpz_ptr)
 
   dtype = np.float32 if fptype == b'f' else np.float64
-  return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order='F')
+  return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order=order)
 
 
