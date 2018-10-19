@@ -68,3 +68,12 @@ def test_floats():
   z = fpzip.decompress(y, order='F')
 
   assert np.all(x == z)
+
+def test_noncontiguous_memory():
+  x = np.random.random_sample(size=(15, 15, 15, 1)).astype(np.float32)
+  x_broken = x[2::2,::3,::2]
+  
+  y = fpzip.compress(x_broken)
+  z = fpzip.decompress(y)
+
+  assert np.all(x_broken == z)

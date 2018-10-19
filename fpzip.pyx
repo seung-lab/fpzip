@@ -76,6 +76,9 @@ def compress(data, precision=0):
   """
   assert data.dtype in (np.float32, np.float64)
 
+  if not (data.flags['C_CONTIGUOUS'] or data.flags['F_CONTIGUOUS']):
+    data = np.ascontiguousarray(data)
+
   if len(data.shape) == 3:
     data = data[:,:,:, np.newaxis ]
 
