@@ -1,6 +1,15 @@
 CHANGES
 =======
 
+1.0.4
+-----
+
+* fix: removed non-ascii characters from README
+
+1.0.3
+-----
+
+* fix: install numpy during setup (#1)
 * chore: update setup.cfg with Python2 classifiers
 
 1.0.2
