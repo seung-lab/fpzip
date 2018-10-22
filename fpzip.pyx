@@ -105,6 +105,7 @@ def compress(data, precision=0):
   fpz_ptr[0].nf = data.shape[3]
 
   if fpzip_write_header(fpz_ptr) == 0:
+    del compression_buf
     raise FpzipWriteError("Cannot write header. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
   # can't get raw ptr from numpy object directly, implicit magic
@@ -123,6 +124,7 @@ def compress(data, precision=0):
     else:
       bufviewd = compression_buf
       bytes_out = bytearray(bufviewd[:header_bytes])  
+    del compression_buf
     return bytes(bytes_out)
 
   if data.dtype == np.float32:
@@ -135,13 +137,14 @@ def compress(data, precision=0):
     outbytes = fpzip_write(fpz_ptr, <void*>&arr_memviewd[0,0,0,0])
     bufviewd = compression_buf
     bytes_out = bytearray(bufviewd[:outbytes])
-   
+  
+  del compression_buf
+  
   if outbytes == 0:
     raise FpzipWriteError("Compression failed. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
   fpzip_write_close(fpz_ptr)
 
-  del compression_buf
   return bytes(bytes_out)
 
 def decompress(bytes encoded, order='C'):
