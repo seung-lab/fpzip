@@ -1,6 +1,20 @@
 CHANGES
 =======
 
+1.1.1
+-----
+
+* fix: truncated message to exclude trailing zeros (#8)
+* fix: small memory leak for error conditions and zero length buffers (#7)
+
+1.1.0
+-----
+
+* docs: add order parameter to decompress in docs
+* docs: update decompress doc string to reflect order parameter
+* feat: allow customization of memory ordering. (#4)
+* Update README.md
+
 1.0.4
 -----
 

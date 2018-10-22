@@ -105,6 +105,7 @@ def compress(data, precision=0):
   fpz_ptr[0].nf = data.shape[3]
 
   if fpzip_write_header(fpz_ptr) == 0:
+    fpzip_write_close(fpz_ptr)
     del compression_buf
     raise FpzipWriteError("Cannot write header. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
@@ -137,13 +138,12 @@ def compress(data, precision=0):
     outbytes = fpzip_write(fpz_ptr, <void*>&arr_memviewd[0,0,0,0])
     bufviewd = compression_buf
     bytes_out = bytearray(bufviewd[:outbytes])[:outbytes]
-  
+
   del compression_buf
+  fpzip_write_close(fpz_ptr)
   
   if outbytes == 0:
     raise FpzipWriteError("Compression failed. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
-
-  fpzip_write_close(fpz_ptr)
 
   return bytes(bytes_out)
 
