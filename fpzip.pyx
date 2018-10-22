@@ -131,12 +131,12 @@ def compress(data, precision=0):
     arr_memviewf = data
     outbytes = fpzip_write(fpz_ptr, <void*>&arr_memviewf[0,0,0,0])
     bufviewf = compression_buf
-    bytes_out = bytearray(bufviewf[:outbytes])
+    bytes_out = bytearray(bufviewf[:outbytes])[:outbytes]
   else:
     arr_memviewd = data
     outbytes = fpzip_write(fpz_ptr, <void*>&arr_memviewd[0,0,0,0])
     bufviewd = compression_buf
-    bytes_out = bytearray(bufviewd[:outbytes])
+    bytes_out = bytearray(bufviewd[:outbytes])[:outbytes]
   
   del compression_buf
   
