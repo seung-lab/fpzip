@@ -85,7 +85,7 @@ def test_basic_conformation():
   # np.array([[[1]]], dtype=np.float32).tobytes()
   # Was compressed by fpzip C program.
   one_fpz = b'ZnB5KYcO8R7gAP8AAAD/AAAA/wAAAP8A8zvT3FAAAAA=\n'
-  one_fpz = base64.decodebytes(one_fpz)
+  one_fpz = base64.decodestring(one_fpz) # decodebytes is the modern name, but py27 doesn't have it
 
   one_array = np.array([[[1]]], dtype=np.float32)
   compressed = fpzip.compress(one_array)
@@ -98,7 +98,7 @@ def test_basic_conformation():
 
   # encoded np.array([[[1,2,3], [4,5,6]]], dtype=np.float32)
   six_fpz = b'ZnB5KYcO8R7gAP8AAAH+AAAC/QAAAP8A8zvT3GsIJgDU4C0p1pY/+2Z1QAA=\n'
-  six_fpz = base64.decodebytes(six_fpz)
+  six_fpz = base64.decodestring(six_fpz)
 
   six_array = np.array([[[1,2,3], [4,5,6]]], dtype=np.float32)
   compressed = fpzip.compress(six_array)
