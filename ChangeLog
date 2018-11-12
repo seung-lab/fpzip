@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+1.1.2
+-----
+
+* docs: update Changelog
 * fix: use "decodestring" instead of "decodebytes"
 * fix: ensure file descriptors are closed for error conditions
 

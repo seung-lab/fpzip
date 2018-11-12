@@ -132,3 +132,5 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+wheelhouse
