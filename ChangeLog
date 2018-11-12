@@ -1,6 +1,9 @@
 CHANGES
 =======
 
+* fix: use "decodestring" instead of "decodebytes"
+* fix: ensure file descriptors are closed for error conditions
+
 1.1.1
 -----
 
