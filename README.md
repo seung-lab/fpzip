@@ -16,11 +16,15 @@ data_again = fpzip.decompress(compressed_bytes, order='F')
 
 ## Installation
 
-*Requires C++ compiler.*
-
 `pip` Installation  
 
-Unfortunately, it's necessary to install numpy first because of a quirk in the Python installation procedure that won't easily recognize when a numpy installation completes in the same process. There are some hacks, but I haven't gotten them to work.
+```bash
+pip install fpzip
+```
+
+If we have a precompiled binary availab,e the above should just work. However, if you have to compile from sounce, unfortunately, it's necessary to install numpy first because of a quirk in the Python installation procedure that won't easily recognize when a numpy installation completes in the same process. There are some hacks, but I haven't gotten them to work.
+
+*Requires C++ compiler.*
 
 ```bash
 pip install numpy
@@ -28,6 +32,8 @@ pip install fpzip
 ```
 
 Direct Installation
+
+*Requires C++ compiler.*  
 
 ```bash
 $ pip install numpy
