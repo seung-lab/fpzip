@@ -2,7 +2,7 @@
 
 # fpzip
 
-Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. Python 2.7 and Python 3+ are supported.
+fpzip is a lossless compression algorithm for 3 and 4 dimensional floating point data. This package contains Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. Python 2.7 and Python 3+ are supported.
 
 ```python
 import fpzip
