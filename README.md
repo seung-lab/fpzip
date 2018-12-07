@@ -2,7 +2,7 @@
 
 # fpzip
 
-fpzip is a lossless compression algorithm for 3 and 4 dimensional floating point data. This package contains Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. Python 2.7 and Python 3+ are supported.
+fpzip is a compression algorithm supporting lossless and lossy encoding up to 4 dimensional floating point data. This package contains Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. Python 2.7 and Python 3+ are supported.
 
 ```python
 import fpzip
@@ -22,7 +22,7 @@ data_again = fpzip.decompress(compressed_bytes, order='F')
 pip install fpzip
 ```
 
-If we have a precompiled binary availab,e the above should just work. However, if you have to compile from sounce, unfortunately, it's necessary to install numpy first because of a quirk in the Python installation procedure that won't easily recognize when a numpy installation completes in the same process. There are some hacks, but I haven't gotten them to work.
+If we have a precompiled binary available the above command should just work. However, if you have to compile from sounce, it's unfortunately necessary to install numpy first because of a quirk in the Python installation procedure that won't easily recognize when a numpy installation completes in the same process. There are some hacks, but I haven't gotten them to work.
 
 #### `pip` Source Installation
 

@@ -67,20 +67,29 @@ cpdef allocate(typecode, ct):
   # create an array with 3 elements with same type as template
   return array.clone(array_template, ct, zero=True)
 
-def compress(data, precision=0):
+def validate_order(order):
+  order = order.upper()
+  if order not in ('C', 'F'):
+    raise ValueError("Undefined order parameter '{}'. Options are 'C' or 'F'".format(order))
+  return order
+
+def compress(data, precision=0, order='C'):
   """
-  fpzip.compress(data, precision=0)
+  fpzip.compress(data, precision=0, order='C')
 
   Takes a 3d or 4d numpy array of floats or doubles and returns
   a compressed bytestring.
   """
-  assert data.dtype in (np.float32, np.float64)
+  if data.dtype not in (np.float32, np.float64):
+    raise ValueError("Data type {} must be a floating type.".format(data.dtype))
 
-  if not (data.flags['C_CONTIGUOUS'] or data.flags['F_CONTIGUOUS']):
-    data = np.ascontiguousarray(data)
+  order = validate_order(order)
+  
+  while len(data.shape) < 4:
+    data = data[..., np.newaxis ]
 
-  if len(data.shape) == 3:
-    data = data[:,:,:, np.newaxis ]
+  if not data.flags['C_CONTIGUOUS'] and not data.flags['F_CONTIGUOUS']:
+    data = np.copy(data, order=order)
 
   header_bytes = 28 # read.cpp:fpzip_read_header + 4 for some reason
 
@@ -99,10 +108,17 @@ def compress(data, precision=0):
     fpz_ptr[0].type = 1 # double
 
   fpz_ptr[0].prec = precision
-  fpz_ptr[0].nx = data.shape[0]
-  fpz_ptr[0].ny = data.shape[1]
-  fpz_ptr[0].nz = data.shape[2]
-  fpz_ptr[0].nf = data.shape[3]
+
+  if order == 'C':
+    fpz_ptr[0].nx = data.shape[3]
+    fpz_ptr[0].ny = data.shape[2]
+    fpz_ptr[0].nz = data.shape[1]
+    fpz_ptr[0].nf = data.shape[0]
+  else:
+    fpz_ptr[0].nx = data.shape[0]
+    fpz_ptr[0].ny = data.shape[1]
+    fpz_ptr[0].nz = data.shape[2]
+    fpz_ptr[0].nf = data.shape[3]
 
   if fpzip_write_header(fpz_ptr) == 0:
     fpzip_write_close(fpz_ptr)
@@ -158,6 +174,8 @@ def decompress(bytes encoded, order='C'):
   should correspond to the byte order of the originally compressed
   array.
   """
+  order = validate_order(order)
+
   # line below necessary to convert from PyObject to a naked pointer
   cdef unsigned char *encodedptr = <unsigned char*>encoded 
   cdef FPZ* fpz_ptr = fpzip_read_from_buffer(<void*>encodedptr)
@@ -182,6 +200,12 @@ def decompress(bytes encoded, order='C'):
   fpzip_read_close(fpz_ptr)
 
   dtype = np.float32 if fptype == b'f' else np.float64
-  return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order=order)
+
+  if order == 'C':
+    return np.frombuffer(buf, dtype=dtype).reshape( (nf, nz, ny, nx), order='C')
+  elif order == 'F':
+    return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order='F')
+  else:
+    raise ValueError("Undefined order parameter '{}'. Options are 'C' or 'F'".format(order))
 
 

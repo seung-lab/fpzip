@@ -6,16 +6,16 @@ import numpy as np
 import fpzip
 
 def test_doubles():
-  x = np.random.random_sample(size=(128, 128, 128, 3)).astype(np.float64)
+  x = np.random.random_sample(size=(3, 2, 2, 2)).astype(np.float64)
 
   x = np.ascontiguousarray(x)
-  y = fpzip.compress(x)
+  y = fpzip.compress(x, order='C')
   z = fpzip.decompress(y, order='C')
 
   assert np.all(x == z)
 
   x = np.asfortranarray(x)
-  y = fpzip.compress(x)
+  y = fpzip.compress(x, order='F')
   z = fpzip.decompress(y, order='F')
 
   assert np.all(x == z)
@@ -36,7 +36,7 @@ def test_floats():
   assert np.all(x == z)
 
   x = np.asfortranarray(x)
-  y = fpzip.compress(x)
+  y = fpzip.compress(x, order='F')
   z = fpzip.decompress(y, order='F')
 
   assert np.all(x == z)
@@ -51,7 +51,7 @@ def test_floats():
   assert np.all(x == z)
 
   x = np.asfortranarray(x)
-  y = fpzip.compress(x)
+  y = fpzip.compress(x, order='F')
   z = fpzip.decompress(y, order='F')
   z = np.squeeze(z, axis=3)
 
@@ -60,13 +60,13 @@ def test_floats():
   x = np.random.random_sample(size=(0, 0, 0, 0)).astype(np.float32)
   
   x = np.ascontiguousarray(x)
-  y = fpzip.compress(x)
-  z = fpzip.decompress(y)
+  y = fpzip.compress(x, order='C')
+  z = fpzip.decompress(y, order='C')
 
   assert np.all(x == z)
 
   x = np.asfortranarray(x)
-  y = fpzip.compress(x)
+  y = fpzip.compress(x, order='F')
   z = fpzip.decompress(y, order='F')
 
   assert np.all(x == z)
