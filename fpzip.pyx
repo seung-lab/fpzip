@@ -79,6 +79,13 @@ def compress(data, precision=0, order='C'):
 
   Takes a 3d or 4d numpy array of floats or doubles and returns
   a compressed bytestring.
+
+  precision indicates the number of bits to truncate. Any value above
+  zero indicates a lossy operation.
+
+  order is 'C' or 'F' (row major vs column major memory layout) and 
+  should correspond to the byte order of the originally compressed
+  array.
   """
   if data.dtype not in (np.float32, np.float64):
     raise ValueError("Data type {} must be a floating type.".format(data.dtype))
