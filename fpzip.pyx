@@ -92,6 +92,8 @@ def compress(data, precision=0, order='C'):
 
   order = validate_order(order)
   
+  is3d = len(data.shape) < 4
+
   while len(data.shape) < 4:
     data = data[..., np.newaxis ]
 
@@ -117,10 +119,20 @@ def compress(data, precision=0, order='C'):
   fpz_ptr[0].prec = precision
 
   if order == 'C':
-    fpz_ptr[0].nx = data.shape[3]
-    fpz_ptr[0].ny = data.shape[2]
-    fpz_ptr[0].nz = data.shape[1]
-    fpz_ptr[0].nf = data.shape[0]
+    if is3d: 
+      # nf controls how many seperate compression blocks to create
+      # it's important to treat the 3D case specially or else 
+      # reduced compression will result as the col size would be used
+      # for nf, creating col seperate blocks instead of 1.
+      fpz_ptr[0].nx = data.shape[2]
+      fpz_ptr[0].ny = data.shape[1]
+      fpz_ptr[0].nz = data.shape[0]
+      fpz_ptr[0].nf = 1
+    else:
+      fpz_ptr[0].nx = data.shape[3]
+      fpz_ptr[0].ny = data.shape[2]
+      fpz_ptr[0].nz = data.shape[1]
+      fpz_ptr[0].nf = data.shape[0]
   else:
     fpz_ptr[0].nx = data.shape[0]
     fpz_ptr[0].ny = data.shape[1]

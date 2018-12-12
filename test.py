@@ -46,7 +46,7 @@ def test_floats():
   x = np.ascontiguousarray(x)
   y = fpzip.compress(x)
   z = fpzip.decompress(y)
-  z = np.squeeze(z, axis=3)
+  z = np.squeeze(z, axis=0) # is3d logic
 
   assert np.all(x == z)
 
@@ -115,5 +115,5 @@ def test_basic_conformation():
 
   assert len(six_fpz) == len(compressed)
   assert np.all(
-    fpzip.decompress(six_fpz) == fpzip.decompress(compressed)[:,:,:,0]
+    fpzip.decompress(six_fpz) == fpzip.decompress(compressed)[0,:,:,:]
   )
