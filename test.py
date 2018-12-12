@@ -6,7 +6,7 @@ import numpy as np
 import fpzip
 
 def test_doubles():
-  x = np.random.random_sample(size=(3, 2, 2, 2)).astype(np.float64)
+  x = np.random.random_sample(size=(128, 127, 126, 2)).astype(np.float64)
 
   x = np.ascontiguousarray(x)
   y = fpzip.compress(x, order='C')
@@ -27,7 +27,7 @@ def test_doubles():
   assert np.all(x == z)  
 
 def test_floats():
-  x = np.random.random_sample(size=(128, 128, 128, 3)).astype(np.float32)
+  x = np.random.random_sample(size=(128, 127, 126, 2)).astype(np.float32)
 
   x = np.ascontiguousarray(x)
   y = fpzip.compress(x)
@@ -97,7 +97,17 @@ def test_basic_conformation():
   )
 
   # encoded np.array([[[1,2,3], [4,5,6]]], dtype=np.float32)
-  six_fpz = b'ZnB5KYcO8R7gAP8AAAH+AAAC/QAAAP8A8zvT3GsIJgDU4C0p1pY/+2Z1QAA=\n'
+  # with open("six.raw", 'wb') as f:
+  #   f.write(six_array.tobytes('C'))
+  #
+  # ./fpzip -i six.raw -3 3 2 1 -o six.fpz
+  #    >> outbytes=44 ratio=0.55
+  #
+  #  with open('six.fpz', 'rb') as f:
+  #    encoded = f.read()
+  #  six_fpz = base64.encodestring(encoded)   
+  
+  six_fpz = b'ZnB5KYcO8R7gAv0AAAH+AAAA/wAAAP8A8zvT3GsIJgDRE0yNUZgAHeZbgAA=\n' # 3 2 1 
   six_fpz = base64.decodestring(six_fpz)
 
   six_array = np.array([[[1,2,3], [4,5,6]]], dtype=np.float32)
@@ -105,5 +115,5 @@ def test_basic_conformation():
 
   assert len(six_fpz) == len(compressed)
   assert np.all(
-    fpzip.decompress(six_fpz) == fpzip.decompress(compressed)
+    fpzip.decompress(six_fpz) == fpzip.decompress(compressed)[:,:,:,0]
   )
