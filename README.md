@@ -8,7 +8,7 @@ fpzip is a compression algorithm supporting lossless and lossy encoding up to 4 
 import fpzip
 import numpy as np
 
-data = np.array(..., dtype=np.float32) # 3d or 4d float or double array
+data = np.array(..., dtype=np.float32) # up to 4d float or double array
 # Compress data losslessly, interpreting the underlying buffer in C (default) or F order.
 compressed_bytes = fpzip.compress(data, precision=0, order='C') # returns byte string
 # Back to 3d or 4d float or double array, decode as C (default) or F order.
