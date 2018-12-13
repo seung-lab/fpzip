@@ -6,40 +6,48 @@ import numpy as np
 import fpzip
 
 def test_doubles():
-  x = np.random.random_sample(size=(128, 127, 126, 2)).astype(np.float64)
+  size = (128, 127, 126, 2)
+  for dims in range(4):
+    print(dims)
+    x = np.random.random_sample(size=size[:dims]).astype(np.float64)
 
-  x = np.ascontiguousarray(x)
-  y = fpzip.compress(x, order='C')
-  z = fpzip.decompress(y, order='C')
+    x = np.ascontiguousarray(x)
+    y = fpzip.compress(x, order='C')
+    z = fpzip.decompress(y, order='C')
 
-  assert np.all(x == z)
+    assert np.all(x == z)
 
-  x = np.asfortranarray(x)
-  y = fpzip.compress(x, order='F')
-  z = fpzip.decompress(y, order='F')
+    x = np.asfortranarray(x)
+    y = fpzip.compress(x, order='F')
+    z = fpzip.decompress(y, order='F')
+    z = np.squeeze(z)
 
-  assert np.all(x == z)
+    assert np.all(x == z)
 
-  x = np.random.random_sample(size=(0, 0, 0, 0)).astype(np.float64)
-  y = fpzip.compress(x)
-  z = fpzip.decompress(y)
+    x = np.random.random_sample(size=[0] * dims).astype(np.float64)
+    y = fpzip.compress(x)
+    z = fpzip.decompress(y)
 
-  assert np.all(x == z)  
+    assert np.all(x == z)  
 
 def test_floats():
-  x = np.random.random_sample(size=(128, 127, 126, 2)).astype(np.float32)
+  size = (128, 127, 126, 2)
+  for dims in range(4):
+    print(dims)
+    x = np.random.random_sample(size=size[:dims]).astype(np.float64)
 
-  x = np.ascontiguousarray(x)
-  y = fpzip.compress(x)
-  z = fpzip.decompress(y, order='C')
+    x = np.ascontiguousarray(x)
+    y = fpzip.compress(x)
+    z = fpzip.decompress(y, order='C')
 
-  assert np.all(x == z)
+    assert np.all(x == z)
 
-  x = np.asfortranarray(x)
-  y = fpzip.compress(x, order='F')
-  z = fpzip.decompress(y, order='F')
+    x = np.asfortranarray(x)
+    y = fpzip.compress(x, order='F')
+    z = fpzip.decompress(y, order='F')
+    z = np.squeeze(z)
 
-  assert np.all(x == z)
+    assert np.all(x == z)
 
   x = np.random.random_sample(size=(128, 128, 128)).astype(np.float32)
 
