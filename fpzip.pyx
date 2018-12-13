@@ -91,11 +91,12 @@ def compress(data, precision=0, order='C'):
     raise ValueError("Data type {} must be a floating type.".format(data.dtype))
 
   order = validate_order(order)
-  
-  is3d = len(data.shape) < 4
 
   while len(data.shape) < 4:
-    data = data[..., np.newaxis ]
+    if order == 'C':
+      data = data[np.newaxis, ...]
+    elif order == 'F':
+      data = data[..., np.newaxis ]
 
   if not data.flags['C_CONTIGUOUS'] and not data.flags['F_CONTIGUOUS']:
     data = np.copy(data, order=order)
@@ -118,26 +119,15 @@ def compress(data, precision=0, order='C'):
 
   fpz_ptr[0].prec = precision
 
+  shape = list(data.shape)
+
   if order == 'C':
-    if is3d: 
-      # nf controls how many seperate compression blocks to create
-      # it's important to treat the 3D case specially or else 
-      # reduced compression will result as the col size would be used
-      # for nf, creating col seperate blocks instead of 1.
-      fpz_ptr[0].nx = data.shape[2]
-      fpz_ptr[0].ny = data.shape[1]
-      fpz_ptr[0].nz = data.shape[0]
-      fpz_ptr[0].nf = 1
-    else:
-      fpz_ptr[0].nx = data.shape[3]
-      fpz_ptr[0].ny = data.shape[2]
-      fpz_ptr[0].nz = data.shape[1]
-      fpz_ptr[0].nf = data.shape[0]
-  else:
-    fpz_ptr[0].nx = data.shape[0]
-    fpz_ptr[0].ny = data.shape[1]
-    fpz_ptr[0].nz = data.shape[2]
-    fpz_ptr[0].nf = data.shape[3]
+    shape.reverse()
+
+  fpz_ptr[0].nx = shape[0]
+  fpz_ptr[0].ny = shape[1]
+  fpz_ptr[0].nz = shape[2]
+  fpz_ptr[0].nf = shape[3]
 
   if fpzip_write_header(fpz_ptr) == 0:
     fpzip_write_close(fpz_ptr)
