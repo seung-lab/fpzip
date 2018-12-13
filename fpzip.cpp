@@ -3433,7 +3433,7 @@ static PyObject *__pyx_pf_5fpzip_4compress(CYTHON_UNUSED PyObject *__pyx_self, P
  *   while len(data.shape) < 4:
  *     if order == 'C':             # <<<<<<<<<<<<<<
  *       data = data[np.newaxis, ...]
- *     elif order == 'F':
+ *     else: # F
  */
     __pyx_t_5 = (__Pyx_PyUnicode_Equals(__pyx_v_order, __pyx_n_u_C, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 96, __pyx_L1_error)
     if (__pyx_t_5) {
@@ -3442,7 +3442,7 @@ static PyObject *__pyx_pf_5fpzip_4compress(CYTHON_UNUSED PyObject *__pyx_self, P
  *   while len(data.shape) < 4:
  *     if order == 'C':
  *       data = data[np.newaxis, ...]             # <<<<<<<<<<<<<<
- *     elif order == 'F':
+ *     else: # F
  *       data = data[..., np.newaxis ]
  */
       __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 97, __pyx_L1_error)
@@ -3469,28 +3469,19 @@ static PyObject *__pyx_pf_5fpzip_4compress(CYTHON_UNUSED PyObject *__pyx_self, P
  *   while len(data.shape) < 4:
  *     if order == 'C':             # <<<<<<<<<<<<<<
  *       data = data[np.newaxis, ...]
- *     elif order == 'F':
+ *     else: # F
  */
       goto __pyx_L8;
     }
 
-    /* "fpzip.pyx":98
- *     if order == 'C':
+    /* "fpzip.pyx":99
  *       data = data[np.newaxis, ...]
- *     elif order == 'F':             # <<<<<<<<<<<<<<
- *       data = data[..., np.newaxis ]
- * 
- */
-    __pyx_t_5 = (__Pyx_PyUnicode_Equals(__pyx_v_order, __pyx_n_u_F, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 98, __pyx_L1_error)
-    if (__pyx_t_5) {
-
-      /* "fpzip.pyx":99
- *       data = data[np.newaxis, ...]
- *     elif order == 'F':
+ *     else: # F
  *       data = data[..., np.newaxis ]             # <<<<<<<<<<<<<<
  * 
  *   if not data.flags['C_CONTIGUOUS'] and not data.flags['F_CONTIGUOUS']:
  */
+    /*else*/ {
       __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_newaxis); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 99, __pyx_L1_error)
@@ -3509,14 +3500,6 @@ static PyObject *__pyx_pf_5fpzip_4compress(CYTHON_UNUSED PyObject *__pyx_self, P
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF_SET(__pyx_v_data, __pyx_t_3);
       __pyx_t_3 = 0;
-
-      /* "fpzip.pyx":98
- *     if order == 'C':
- *       data = data[np.newaxis, ...]
- *     elif order == 'F':             # <<<<<<<<<<<<<<
- *       data = data[..., np.newaxis ]
- * 
- */
     }
     __pyx_L8:;
   }

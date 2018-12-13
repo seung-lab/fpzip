@@ -95,7 +95,7 @@ def compress(data, precision=0, order='C'):
   while len(data.shape) < 4:
     if order == 'C':
       data = data[np.newaxis, ...]
-    elif order == 'F':
+    else: # F
       data = data[..., np.newaxis ]
 
   if not data.flags['C_CONTIGUOUS'] and not data.flags['F_CONTIGUOUS']:
