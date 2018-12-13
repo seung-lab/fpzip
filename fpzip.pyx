@@ -77,15 +77,14 @@ def compress(data, precision=0, order='C'):
   """
   fpzip.compress(data, precision=0, order='C')
 
-  Takes a 3d or 4d numpy array of floats or doubles and returns
+  Takes up to a 4d numpy array of floats or doubles and returns
   a compressed bytestring.
 
   precision indicates the number of bits to truncate. Any value above
   zero indicates a lossy operation.
 
   order is 'C' or 'F' (row major vs column major memory layout) and 
-  should correspond to the byte order of the originally compressed
-  array.
+  should correspond to the underlying orientation of the input array.
   """
   if data.dtype not in (np.float32, np.float64):
     raise ValueError("Data type {} must be a floating type.".format(data.dtype))
@@ -121,6 +120,12 @@ def compress(data, precision=0, order='C'):
 
   shape = list(data.shape)
 
+  # The default C order of 4D numpy arrays is (channel, depth, row, col)
+  # col is the fastest changing index in the underlying buffer. 
+  # fpzip expects an XYZC orientation in the array, namely nx changes most rapidly. 
+  # Since in this case, col is the most rapidly changing index, 
+  # the inputs to fpzip should be X=col, Y=row, Z=depth, F=channel
+  # If the order is F, the default array shape is fine.
   if order == 'C':
     shape.reverse()
 
@@ -177,7 +182,7 @@ def decompress(bytes encoded, order='C'):
   fpzip.decompress(encoded, order='C')
 
   Accepts an fpzip encoded bytestring (e.g. b'fpy)....') and 
-  returns the 4d numpy array that generated it.
+  returns the original array as a 4d numpy array.
 
   order is 'C' or 'F' (row major vs column major memory layout) and 
   should correspond to the byte order of the originally compressed
