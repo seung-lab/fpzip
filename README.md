@@ -9,9 +9,10 @@ import fpzip
 import numpy as np
 
 data = np.array(..., dtype=np.float32) # 3d or 4d float or double array
-compressed_bytes = fpzip.compress(data, precision=0) # b'...'
+# Compress data losslessly, interpreting the underlying buffer in C (default) or F order.
+compressed_bytes = fpzip.compress(data, precision=0, order='C') # returns byte string
 # Back to 3d or 4d float or double array, decode as C (default) or F order.
-data_again = fpzip.decompress(compressed_bytes, order='F') 
+data_again = fpzip.decompress(compressed_bytes, order='C') 
 ```
 
 ## Installation
