@@ -2,16 +2,17 @@
 
 # fpzip
 
-fpzip is a lossless compression algorithm for 3 and 4 dimensional floating point data. This package contains Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. Python 2.7 and Python 3+ are supported.
+fpzip is a compression algorithm supporting lossless and lossy encoding for up to 4 dimensional floating point data. This package contains Python C++ bindings for the fpzip algorithm (version 1.2.0). The version number for this package is independent. Python 2.7 and Python 3+ are supported.
 
 ```python
 import fpzip
 import numpy as np
 
-data = np.array(..., dtype=np.float32) # 3d or 4d float or double array
-compressed_bytes = fpzip.compress(data, precision=0) # b'...'
+data = np.array(..., dtype=np.float32) # up to 4d float or double array
+# Compress data losslessly, interpreting the underlying buffer in C (default) or F order.
+compressed_bytes = fpzip.compress(data, precision=0, order='C') # returns byte string
 # Back to 3d or 4d float or double array, decode as C (default) or F order.
-data_again = fpzip.decompress(compressed_bytes, order='F') 
+data_again = fpzip.decompress(compressed_bytes, order='C') 
 ```
 
 ## Installation
@@ -22,7 +23,7 @@ data_again = fpzip.decompress(compressed_bytes, order='F')
 pip install fpzip
 ```
 
-If we have a precompiled binary availab,e the above should just work. However, if you have to compile from sounce, unfortunately, it's necessary to install numpy first because of a quirk in the Python installation procedure that won't easily recognize when a numpy installation completes in the same process. There are some hacks, but I haven't gotten them to work.
+If we have a precompiled binary available the above command should just work. However, if you have to compile from sounce, it's unfortunately necessary to install numpy first because of a quirk in the Python installation procedure that won't easily recognize when a numpy installation completes in the same process. There are some hacks, but I haven't gotten them to work.
 
 #### `pip` Source Installation
 

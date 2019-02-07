@@ -67,20 +67,38 @@ cpdef allocate(typecode, ct):
   # create an array with 3 elements with same type as template
   return array.clone(array_template, ct, zero=True)
 
-def compress(data, precision=0):
-  """
-  fpzip.compress(data, precision=0)
+def validate_order(order):
+  order = order.upper()
+  if order not in ('C', 'F'):
+    raise ValueError("Undefined order parameter '{}'. Options are 'C' or 'F'".format(order))
+  return order
 
-  Takes a 3d or 4d numpy array of floats or doubles and returns
+def compress(data, precision=0, order='C'):
+  """
+  fpzip.compress(data, precision=0, order='C')
+
+  Takes up to a 4d numpy array of floats or doubles and returns
   a compressed bytestring.
+
+  precision indicates the number of bits to truncate. Any value above
+  zero indicates a lossy operation.
+
+  order is 'C' or 'F' (row major vs column major memory layout) and 
+  should correspond to the underlying orientation of the input array.
   """
-  assert data.dtype in (np.float32, np.float64)
+  if data.dtype not in (np.float32, np.float64):
+    raise ValueError("Data type {} must be a floating type.".format(data.dtype))
 
-  if not (data.flags['C_CONTIGUOUS'] or data.flags['F_CONTIGUOUS']):
-    data = np.ascontiguousarray(data)
+  order = validate_order(order)
 
-  if len(data.shape) == 3:
-    data = data[:,:,:, np.newaxis ]
+  while len(data.shape) < 4:
+    if order == 'C':
+      data = data[np.newaxis, ...]
+    else: # F
+      data = data[..., np.newaxis ]
+
+  if not data.flags['C_CONTIGUOUS'] and not data.flags['F_CONTIGUOUS']:
+    data = np.copy(data, order=order)
 
   header_bytes = 28 # read.cpp:fpzip_read_header + 4 for some reason
 
@@ -99,10 +117,22 @@ def compress(data, precision=0):
     fpz_ptr[0].type = 1 # double
 
   fpz_ptr[0].prec = precision
-  fpz_ptr[0].nx = data.shape[0]
-  fpz_ptr[0].ny = data.shape[1]
-  fpz_ptr[0].nz = data.shape[2]
-  fpz_ptr[0].nf = data.shape[3]
+
+  shape = list(data.shape)
+
+  # The default C order of 4D numpy arrays is (channel, depth, row, col)
+  # col is the fastest changing index in the underlying buffer. 
+  # fpzip expects an XYZC orientation in the array, namely nx changes most rapidly. 
+  # Since in this case, col is the most rapidly changing index, 
+  # the inputs to fpzip should be X=col, Y=row, Z=depth, F=channel
+  # If the order is F, the default array shape is fine.
+  if order == 'C':
+    shape.reverse()
+
+  fpz_ptr[0].nx = shape[0]
+  fpz_ptr[0].ny = shape[1]
+  fpz_ptr[0].nz = shape[2]
+  fpz_ptr[0].nf = shape[3]
 
   if fpzip_write_header(fpz_ptr) == 0:
     fpzip_write_close(fpz_ptr)
@@ -152,12 +182,14 @@ def decompress(bytes encoded, order='C'):
   fpzip.decompress(encoded, order='C')
 
   Accepts an fpzip encoded bytestring (e.g. b'fpy)....') and 
-  returns the 4d numpy array that generated it.
+  returns the original array as a 4d numpy array.
 
   order is 'C' or 'F' (row major vs column major memory layout) and 
   should correspond to the byte order of the originally compressed
   array.
   """
+  order = validate_order(order)
+
   # line below necessary to convert from PyObject to a naked pointer
   cdef unsigned char *encodedptr = <unsigned char*>encoded 
   cdef FPZ* fpz_ptr = fpzip_read_from_buffer(<void*>encodedptr)
@@ -182,6 +214,12 @@ def decompress(bytes encoded, order='C'):
   fpzip_read_close(fpz_ptr)
 
   dtype = np.float32 if fptype == b'f' else np.float64
-  return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order=order)
+
+  if order == 'C':
+    return np.frombuffer(buf, dtype=dtype).reshape( (nf, nz, ny, nx), order='C')
+  elif order == 'F':
+    return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order='F')
+  else:
+    raise ValueError("Undefined order parameter '{}'. Options are 'C' or 'F'".format(order))
 
 
