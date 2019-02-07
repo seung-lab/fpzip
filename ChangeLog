@@ -1,6 +1,23 @@
 CHANGES
 =======
 
+* docs: fix missing preposition
+* test: order C and F in non-contiguous array
+* test: add tests for multiple dimension sizes
+* docs: correct mistakes and ambiguities in docstring text
+* docs: "up to 4d" in example
+* docs: updated compression example with order parameter
+* refactor: change loop to account for binary choice
+* fix: handle dimensions in C order for 1D, 2D, 3D, 4D
+* feat: specialize C order for 3D arrays so that compression is optimal
+* test: basic conformation passing
+* docs: add documentation for order and precision
+* feat: order flag for compress
+* Update README.md
+* Update README.md
+* docs: README.md reflects available binaries
+* feat: add semi-automated builds of fpzip binaries via docker
+
 1.1.2
 -----
 
