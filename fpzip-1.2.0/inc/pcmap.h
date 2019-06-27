@@ -14,53 +14,53 @@ struct PCmap;
 // specialized for integer-to-integer map
 template <typename T, unsigned width>
 struct PCmap<T, width, void> {
-  typedef T DOMAIN;
-  typedef T RANGE;
-  static const unsigned bits = width;                    // RANGE bits
-  static const unsigned shift = bitsizeof(RANGE) - bits; // DOMAIN\RANGE bits
-  RANGE forward(DOMAIN d) const { return d >> shift; }
-  DOMAIN inverse(RANGE r) const { return r << shift; }
-  DOMAIN identity(DOMAIN d) const { return inverse(forward(d)); }
+  typedef T DOMAIN_TYPE;
+  typedef T RANGE_TYPE;
+  static const unsigned bits = width;                    // RANGE_TYPE bits
+  static const unsigned shift = bitsizeof(RANGE_TYPE) - bits; // DOMAIN_TYPE\RANGE_TYPE bits
+  RANGE_TYPE forward(DOMAIN_TYPE d) const { return d >> shift; }
+  DOMAIN_TYPE inverse(RANGE_TYPE r) const { return r << shift; }
+  DOMAIN_TYPE identity(DOMAIN_TYPE d) const { return inverse(forward(d)); }
 };
 
 // specialized for float type
 template <unsigned width>
 struct PCmap<float, width, void> {
-  typedef float    DOMAIN;
-  typedef unsigned RANGE;
+  typedef float    DOMAIN_TYPE;
+  typedef unsigned RANGE_TYPE;
   union UNION {
-    UNION(DOMAIN d) : d(d) {}
-    UNION(RANGE r) : r(r) {}
-    DOMAIN d;
-    RANGE r;
+    UNION(DOMAIN_TYPE d) : d(d) {}
+    UNION(RANGE_TYPE r) : r(r) {}
+    DOMAIN_TYPE d;
+    RANGE_TYPE r;
   };
-  static const unsigned bits = width;                    // RANGE bits
-  static const unsigned shift = bitsizeof(RANGE) - bits; // DOMAIN\RANGE bits
-  RANGE fcast(DOMAIN d) const;
-  DOMAIN icast(RANGE r) const;
-  RANGE forward(DOMAIN d) const;
-  DOMAIN inverse(RANGE r) const;
-  DOMAIN identity(DOMAIN d) const;
+  static const unsigned bits = width;                    // RANGE_TYPE bits
+  static const unsigned shift = bitsizeof(RANGE_TYPE) - bits; // DOMAIN_TYPE\RANGE_TYPE bits
+  RANGE_TYPE fcast(DOMAIN_TYPE d) const;
+  DOMAIN_TYPE icast(RANGE_TYPE r) const;
+  RANGE_TYPE forward(DOMAIN_TYPE d) const;
+  DOMAIN_TYPE inverse(RANGE_TYPE r) const;
+  DOMAIN_TYPE identity(DOMAIN_TYPE d) const;
 };
 
 // specialized for double type
 template <unsigned width>
 struct PCmap<double, width, void> {
-  typedef double             DOMAIN;
-  typedef unsigned long long RANGE;
+  typedef double             DOMAIN_TYPE;
+  typedef unsigned long long RANGE_TYPE;
   union UNION {
-    UNION(DOMAIN d) : d(d) {}
-    UNION(RANGE r) : r(r) {}
-    DOMAIN d;
-    RANGE r;
+    UNION(DOMAIN_TYPE d) : d(d) {}
+    UNION(RANGE_TYPE r) : r(r) {}
+    DOMAIN_TYPE d;
+    RANGE_TYPE r;
   };
-  static const unsigned bits = width;                    // RANGE bits
-  static const unsigned shift = bitsizeof(RANGE) - bits; // DOMAIN\RANGE bits
-  RANGE fcast(DOMAIN d) const;
-  DOMAIN icast(RANGE r) const;
-  RANGE forward(DOMAIN d) const;
-  DOMAIN inverse(RANGE r) const;
-  DOMAIN identity(DOMAIN d) const;
+  static const unsigned bits = width;                    // RANGE_TYPE bits
+  static const unsigned shift = bitsizeof(RANGE_TYPE) - bits; // DOMAIN_TYPE\RANGE_TYPE bits
+  RANGE_TYPE fcast(DOMAIN_TYPE d) const;
+  DOMAIN_TYPE icast(RANGE_TYPE r) const;
+  RANGE_TYPE forward(DOMAIN_TYPE d) const;
+  DOMAIN_TYPE inverse(RANGE_TYPE r) const;
+  DOMAIN_TYPE identity(DOMAIN_TYPE d) const;
 };
 
 #include "pcmap.inl"
