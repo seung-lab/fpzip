@@ -1,9 +1,10 @@
 CHANGES
 =======
 
-1.1.3
------
-
+* chore: move test.py to automated\_test.py
+* Renamed DOMAIN and RANGE to DOMAIN\_TYPE and RANGE\_TYPE to fix a naming clash when compiling with MSVC (#13)
+* chore: set numpy 1.16+ as requirement
+* chore: drop py34 support add py37 testing to travis
 * chore: bump version to 1.1.3
 * fix: add order to compress parameters (#12)
 * Update README.md
