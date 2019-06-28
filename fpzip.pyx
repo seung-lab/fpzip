@@ -9,7 +9,7 @@ cimport numpy as numpy
 
 import numpy as np
 
-__VERSION__ = '1.1.3'
+__VERSION__ = '1.1.4'
 __version__ = __VERSION__
 
 FPZ_ERROR_STRINGS = [
