@@ -27,6 +27,15 @@ if np:
 
   sources += [ 'fpzip.cpp' ]
 
+
+  extra_compile_args = [
+    '-std=c++11', 
+    '-DFPZIP_FP=FPZIP_FP_FAST', '-DFPZIP_BLOCK_SIZE=0x1000', '-DWITH_UNION',
+  ]
+
+  if sys.platform == 'darwin':
+    extra_compile_args += [ '-stdlib=libc++', '-mmacosx-version-min=10.9' ]
+
   setuptools.setup(
     setup_requires=['pbr', 'numpy'],
     extras_require={
@@ -39,10 +48,7 @@ if np:
         sources=sources,
         language='c++',
         include_dirs=[ join(fpzipdir, 'inc'), np.get_include() ],
-        extra_compile_args=[
-          '-std=c++11', 
-          '-DFPZIP_FP=FPZIP_FP_FAST', '-DFPZIP_BLOCK_SIZE=0x1000', '-DWITH_UNION',
-        ]
+        extra_compile_args=extra_compile_args,
       )
     ],
     pbr=True)
