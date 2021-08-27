@@ -4,6 +4,8 @@ CHANGES
 1.1.5
 -----
 
+* chore: add restriction py36+
+* fix: remove pp27 from gh action
 * release(1.1.5): updated cython generated cpp file
 * chore: updated pyx file with newest cython for py39
 * chore: delete travis
