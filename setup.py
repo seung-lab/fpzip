@@ -42,6 +42,7 @@ if np:
       ':python_version == "2.7"': ['futures'],
       ':python_version == "2.6"': ['futures'],
     },
+    python_requires="~=3.6", # >= 3.6 < 4.0
     ext_modules=[
       setuptools.Extension(
         'fpzip',
