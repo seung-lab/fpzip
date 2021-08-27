@@ -1,9 +1,21 @@
 CHANGES
 =======
 
-1.1.3
+1.1.5
 -----
 
+* release(1.1.5): updated cython generated cpp file
+* chore: updated pyx file with newest cython for py39
+* chore: delete travis
+* chore: add ghithub actions
+* fix: rerun cython to generate a python3.9 compatible cpp file
+* fix: drop py27 and add py39 by replacing decodestring with decodebytes
+* install: for mac, add stdlib=libc++ and min OS version of 10.9
+* chore: update setup.cfg - py27,py35,py36,py37 and content-type markdown
+* chore: move test.py to automated\_test.py
+* Renamed DOMAIN and RANGE to DOMAIN\_TYPE and RANGE\_TYPE to fix a naming clash when compiling with MSVC (#13)
+* chore: set numpy 1.16+ as requirement
+* chore: drop py34 support add py37 testing to travis
 * chore: bump version to 1.1.3
 * fix: add order to compress parameters (#12)
 * Update README.md
