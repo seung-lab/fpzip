@@ -9,7 +9,7 @@ cimport numpy as numpy
 
 import numpy as np
 
-__VERSION__ = '1.1.5'
+__VERSION__ = '1.2.0'
 __version__ = __VERSION__
 
 FPZ_ERROR_STRINGS = [
@@ -121,15 +121,13 @@ def compress(data, precision=0, order='C'):
 
   shape = list(data.shape)
 
-  # The default C order of 4D numpy arrays is (channel, depth, row, col)
-  # col is the fastest changing index in the underlying buffer. 
-  # fpzip expects an XYZC orientation in the array, namely nx changes most rapidly. 
-  # Since in this case, col is the most rapidly changing index, 
-  # the inputs to fpzip should be X=col, Y=row, Z=depth, F=channel
-  # If the order is F, the default array shape is fine.
   if order == 'C':
     shape.reverse()
 
+  # Dr. Lindstrom noted that fpzip expects czyx order with
+  # channels changing most slowly. We should probably change
+  # this up in v2 and write in the documentation what should
+  # go where.
   fpz_ptr[0].nx = shape[0]
   fpz_ptr[0].ny = shape[1]
   fpz_ptr[0].nz = shape[2]
@@ -140,7 +138,6 @@ def compress(data, precision=0, order='C'):
     del compression_buf
     raise FpzipWriteError("Cannot write header. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
-  # can't get raw ptr from numpy object directly, implicit magic
   cdef float[:,:,:,:] arr_memviewf
   cdef double[:,:,:,:] arr_memviewd
   cdef size_t outbytes
@@ -221,6 +218,6 @@ def decompress(bytes encoded, order='C'):
   elif order == 'F':
     return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order='F')
   else:
-    raise ValueError("Undefined order parameter '{}'. Options are 'C' or 'F'".format(order))
+    raise ValueError(f"Undefined order parameter '{order}'. Options are 'C' or 'F'")
 
 
