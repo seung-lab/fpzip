@@ -1,0 +1,8 @@
+add_executable(fpzipcmd fpzip.cpp)
+if(NOT MSVC)
+  set_property(TARGET fpzipcmd PROPERTY OUTPUT_NAME fpzip)
+endif()
+target_link_libraries(fpzipcmd fpzip)
+if(HAVE_LIBM_MATH)
+  target_link_libraries(fpzipcmd m)
+endif()
