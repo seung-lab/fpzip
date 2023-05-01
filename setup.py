@@ -10,17 +10,17 @@ fpzipdir = 'fpzip-1.3.0'
 # NOTE: If fpzip.cpp does not exist:
 # cython -3 --fast-fail -v --cplus ./ext/src/third_party/fpzip-1.2.0/src/fpzip.pyx
 
-sources = [ 
-  join(fpzipdir, 'src', x) for x in ( 
-    'error.cpp', 'rcdecoder.cpp', 'rcencoder.cpp', 
-    'rcqsmodel.cpp', 'write.cpp', 'read.cpp', 
-  ) 
+sources = [
+  join(fpzipdir, 'src', x) for x in (
+    'error.cpp', 'rcdecoder.cpp', 'rcencoder.cpp',
+    'rcqsmodel.cpp', 'write.cpp', 'read.cpp',
+  )
 ]
 sources += [ 'fpzip.cpp' ]
 
 extra_compile_args = [
-  '-DFPZIP_FP=FPZIP_FP_FAST', 
-  '-DFPZIP_BLOCK_SIZE=0x1000', 
+  '-DFPZIP_FP=FPZIP_FP_FAST',
+  '-DFPZIP_BLOCK_SIZE=0x1000',
   '-DWITH_UNION',
 ]
 
@@ -45,8 +45,3 @@ setuptools.setup(
     )
   ],
   pbr=True)
-
-
-
-
-
