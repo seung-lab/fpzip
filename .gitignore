@@ -134,3 +134,5 @@ ENV/
 .mypy_cache/
 
 wheelhouse
+
+fpzip.cpp

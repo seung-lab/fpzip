@@ -4,11 +4,16 @@ import sys
 
 import numpy as np
 
+class NumpyImport:
+  def __repr__(self):
+    import numpy as np
+
+    return np.get_include()
+
+  __fspath__ = __repr__
+
 join = os.path.join
 fpzipdir = 'fpzip-1.3.0'
-
-# NOTE: If fpzip.cpp does not exist:
-# cython -3 --fast-fail -v --cplus ./ext/src/third_party/fpzip-1.2.0/src/fpzip.pyx
 
 sources = [ 
   join(fpzipdir, 'src', x) for x in ( 
@@ -16,7 +21,7 @@ sources = [
     'rcqsmodel.cpp', 'write.cpp', 'read.cpp', 
   ) 
 ]
-sources += [ 'fpzip.cpp' ]
+sources += [ 'fpzip.pyx' ]
 
 extra_compile_args = [
   '-DFPZIP_FP=FPZIP_FP_FAST', 
@@ -33,14 +38,14 @@ else:
   extra_compile_args += [ '-O3', '-std=c++11' ]
 
 setuptools.setup(
-  setup_requires=['pbr', 'numpy'],
-  python_requires="~=3.6", # >= 3.6 < 4.0
+  setup_requires=['pbr', 'numpy','cython'],
+  python_requires=">=3.7,<4.0", # >= 3.6 < 4.0
   ext_modules=[
     setuptools.Extension(
       'fpzip',
       sources=sources,
       language='c++',
-      include_dirs=[ join(fpzipdir, 'include'), np.get_include() ],
+      include_dirs=[ join(fpzipdir, 'include'), NumpyImport() ],
       extra_compile_args=extra_compile_args,
     )
   ],

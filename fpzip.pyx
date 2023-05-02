@@ -1,3 +1,4 @@
+# cython: language_level=3
 from libc.stdio cimport FILE, fopen, fwrite, fclose
 from libc.stdlib cimport calloc, free
 from libc.stdint cimport uint8_t
@@ -9,7 +10,7 @@ cimport numpy as numpy
 
 import numpy as np
 
-__VERSION__ = '1.2.0'
+__VERSION__ = '1.2.1'
 __version__ = __VERSION__
 
 FPZ_ERROR_STRINGS = [
