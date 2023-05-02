@@ -1,4 +1,25 @@
-name: Build Wheels
+name: Build Wheels and Upload to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease_version:
+        description: 'Prerelease Version'
+        required: true
+        default: ''
+        type: string
+
+      test_pypi:
+        description: 'Release to Test PyPI'
+        required: true
+        default: true
+        type: boolean
+
+      pypi:
+        description: 'Release to PyPI'
+        required: true
+        default: false
+        type: boolean
 
 on:
   workflow_dispatch:
@@ -22,7 +43,8 @@ on:
         type: boolean
 
 env:
-  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
+  # CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
+  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* cp37-* cp37-* cp37-* cp310-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
 
 jobs:
   build_wheels:
@@ -35,9 +57,9 @@ jobs:
         # python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
         # os: [ubuntu-latest, windows-latest, macos-latest]
         arch: [auto]
-        include:
-          - os: ubuntu-20.04
-            arch: aarch64
+        # include:
+        #   - os: ubuntu-20.04
+        #     arch: aarch64
 
     steps:
       - uses: actions/checkout@v3
