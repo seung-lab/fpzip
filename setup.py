@@ -32,16 +32,22 @@ if sys.platform == 'win32':
 else:
   extra_compile_args += [ '-O3', '-std=c++11' ]
 
+prerelease_version = os.getenv("PRERELEASE_VERSION", "")
+if prerelease_version == "release":
+    prerelease_version = ""
+
 setuptools.setup(
-  setup_requires=['pbr', 'numpy'],
-  python_requires="~=3.6", # >= 3.6 < 4.0
-  ext_modules=[
-    setuptools.Extension(
-      'fpzip',
-      sources=sources,
-      language='c++',
-      include_dirs=[ join(fpzipdir, 'include'), np.get_include() ],
-      extra_compile_args=extra_compile_args,
-    )
-  ],
-  pbr=True)
+    version='1.2.1' + prerelease_version,
+    setup_requires=['pbr', 'numpy'],
+    python_requires="~=3.6", # >= 3.6 < 4.0
+    version = '1.2.1',
+    ext_modules=[
+      setuptools.Extension(
+        'fpzip',
+        sources=sources,
+        language='c++',
+        include_dirs=[ join(fpzipdir, 'include'), np.get_include() ],
+        extra_compile_args=extra_compile_args,
+      )
+    ],
+    pbr=True)

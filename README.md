@@ -1,5 +1,10 @@
 [![PyPI version](https://badge.fury.io/py/fpzip.svg)](https://badge.fury.io/py/fpzip)
 
+# Introduction
+
+This is a fork of https://github.com/seung-lab/fpzip with changes to allow it to work
+with Python 3.11 and also have a different PyPI deployment system.
+
 # fpzip
 
 fpzip is a compression algorithm supporting lossless and lossy encoding for up to 4 dimensional floating point data. This package contains Python C++ bindings for the fpzip algorithm (version 1.3.0). The version number for this package is independent. Python 3.7+ is supported.
