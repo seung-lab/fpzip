@@ -8,7 +8,7 @@ join = os.path.join
 fpzipdir = 'fpzip-1.3.0'
 
 # NOTE: If fpzip.cpp does not exist:
-# cython -3 --fast-fail -v --cplus ./ext/src/third_party/fpzip-1.2.0/src/fpzip.pyx
+# cython --fast-fail -v --cplus fpzip.pyx
 
 sources = [
   join(fpzipdir, 'src', x) for x in (

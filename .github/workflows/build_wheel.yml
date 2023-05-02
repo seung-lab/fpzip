@@ -1,9 +1,26 @@
 name: Build Wheels
 
 on:
-  push:
-    tags:
-      - '*'
+  workflow_dispatch:
+    inputs:
+      prerelease_version:
+        description: 'Prerelease Version'
+        required: true
+        default: ''
+        type: string
+
+      test_pypi:
+        description: 'Release to Test PyPI'
+        required: true
+        default: true
+        type: boolean
+
+      pypi:
+        description: 'Release to PyPI'
+        required: true
+        default: false
+        type: boolean
+
 env:
   CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
 
@@ -13,14 +30,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-2019, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         arch: [auto]
         include:
           - os: ubuntu-20.04
             arch: aarch64
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up QEMU
         if:  ${{ matrix.arch == 'aarch64' }}
@@ -33,6 +50,30 @@ jobs:
           CIBW_ARCHS_LINUX: ${{matrix.arch}}
           CIBW_BEFORE_BUILD: pip install oldest-supported-numpy
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
+
+  upload_pypi:
+    needs: [build_wheels]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact   # prevents extra directory
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@v1.5.0
+        if: inputs.test_pypi
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
+          verify_metadata: false
+
+      - uses: pypa/gh-action-pypi-publish@v1.5.0
+        if: inputs.pypi
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          verify_metadata: false
