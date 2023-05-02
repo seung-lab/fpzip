@@ -40,7 +40,6 @@ setuptools.setup(
     version='1.2.1' + prerelease_version,
     setup_requires=['pbr', 'numpy'],
     python_requires="~=3.6", # >= 3.6 < 4.0
-    version = '1.2.1',
     ext_modules=[
       setuptools.Extension(
         'fpzip',
