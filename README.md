@@ -1,7 +1,11 @@
+[![PyPI version](https://badge.fury.io/py/rms-fpzip.svg)](https://badge.fury.io/py/rms-fpzip)
+
 # Introduction
 
 This is a fork of https://github.com/seung-lab/fpzip with changes to allow it to work
 with Python 3.11 and also have a different PyPI deployment system.
+
+This fork is maintained by the Ring-Moon Systems Node of NASA's Planetary Data System.
 
 # fpzip
 
