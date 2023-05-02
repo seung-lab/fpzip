@@ -21,27 +21,6 @@ on:
         default: false
         type: boolean
 
-on:
-  workflow_dispatch:
-    inputs:
-      prerelease_version:
-        description: 'Prerelease Version'
-        required: true
-        default: ''
-        type: string
-
-      test_pypi:
-        description: 'Release to Test PyPI'
-        required: true
-        default: true
-        type: boolean
-
-      pypi:
-        description: 'Release to PyPI'
-        required: true
-        default: false
-        type: boolean
-
 env:
   # CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
   CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* cp37-* cp37-* cp37-* cp310-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
