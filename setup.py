@@ -48,5 +48,4 @@ setuptools.setup(
         include_dirs=[ join(fpzipdir, 'include'), np.get_include() ],
         extra_compile_args=extra_compile_args,
       )
-    ],
-    pbr=True)
+    ])
