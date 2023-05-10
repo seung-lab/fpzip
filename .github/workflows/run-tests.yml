@@ -13,6 +13,9 @@ on:
   schedule:
     - cron: "40 11 * * 0"
 
+env:
+  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
+
 jobs:
   test:
     name: Test fpzip
@@ -27,18 +30,18 @@ jobs:
             arch: aarch64
 
     steps:
-    - name: Checkout
-      - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .
-        pip install pytest
-        pip install numpy
-    - name: Test with pytest
-      run: |
-        python -m pytest -v -x automated_test.py
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install -e .
+          pip3 install pytest
+          pip3 install numpy
+      - name: Test with pytest
+        run: |
+          python -m pytest -v -x automated_test.py
