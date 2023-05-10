@@ -1,9 +1,13 @@
-[![PyPI version](https://badge.fury.io/py/rms-fpzip.svg)](https://badge.fury.io/py/rms-fpzip)
+| PyPI Release | Test Status |
+| ------------ | ----------- |
+| [![PyPI version](https://badge.fury.io/py/rms-fpzip.svg)](https://badge.fury.io/py/rms-fpzip) | [![Build status](https://img.shields.io/github/actions/workflow/status/SETI/pds-fpzip/run-tests.yml?branch=master)](https://github.com/SETI/pds-fpzip/actions) |
 
 # Introduction
 
 This is a fork of https://github.com/seung-lab/fpzip with changes to allow it to work
-with Python 3.11 and also have a different PyPI deployment system.
+with Python 3.11; it also has a different test and PyPI deployment system. We are grateful
+to William Silversmith for all of the hard work necessary to make this project in the
+first place.
 
 This fork is maintained by the Ring-Moon Systems Node of NASA's Planetary Data System.
 

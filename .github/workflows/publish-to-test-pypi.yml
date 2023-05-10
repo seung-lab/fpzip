@@ -1,29 +1,18 @@
-name: Build Wheels and Upload to PyPI
+# This workflow compiles FPZIP for many architectures and publishes a branch
+# to Test-PyPi
 
+name: Publish to Test PyPI
+run-name: Publish to Test PyPI triggered by ${{ github.triggering_actor }}
+
+# Controls when the workflow will run - manually triggered
+# Note that if this workflow is run without a tag on the HEAD commit, the
+# version will be marked ".devN" where N is the number of commits since the
+# last version tag.
 on:
   workflow_dispatch:
-    inputs:
-      prerelease_version:
-        description: 'Prerelease Version'
-        required: true
-        default: ''
-        type: string
-
-      test_pypi:
-        description: 'Release to Test PyPI'
-        required: true
-        default: true
-        type: boolean
-
-      pypi:
-        description: 'Release to PyPI'
-        required: true
-        default: false
-        type: boolean
 
 env:
   CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
-  # CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* cp37-* cp38-* cp39-* cp310-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
 
 jobs:
   build_wheels:
@@ -40,6 +29,7 @@ jobs:
             arch: aarch64
 
     steps:
+      - name: Checkout
       - uses: actions/checkout@v3
 
       - name: Set up QEMU
@@ -53,6 +43,7 @@ jobs:
           CIBW_ARCHS_LINUX: ${{matrix.arch}}
           CIBW_BEFORE_BUILD: pip install oldest-supported-numpy
 
+      - name: Upload artifacts
       - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
@@ -61,22 +52,16 @@ jobs:
     needs: [build_wheels]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v3
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
         with:
           name: artifact   # prevents extra directory
           path: dist
 
-      - uses: pypa/gh-action-pypi-publish@v1.5.0
-        if: inputs.test_pypi
+      - name: Publish to Test PyPI
+        uses: pypa/gh-action-pypi-publish@v1.8.6
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-          verify_metadata: false
-
-      - uses: pypa/gh-action-pypi-publish@v1.5.0
-        if: inputs.pypi
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          verify_metadata: false
+          repository-url: https://test.pypi.org/legacy/
+          verify-metadata: false

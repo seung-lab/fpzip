@@ -1,0 +1,65 @@
+# This workflow compiles CSPICE for many architectures and publishes a branch
+# to PyPi
+
+name: Publish to PyPI
+run-name: Publish to PyPI triggered by ${{ github.ref_type }} ${{ github.ref_name }}
+
+# Controls when the workflow will run - push of a "v*" tag
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* *-musllinux*
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{matrix.arch}} for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # os: [ubuntu-latest]
+        # python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [auto]
+        include:
+          - os: ubuntu-20.04
+            arch: aarch64
+
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        if:  ${{ matrix.arch == 'aarch64' }}
+        uses: docker/setup-qemu-action@v1
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.12.3
+        # to supply options, put them in 'env', like:
+        env:
+          CIBW_ARCHS_LINUX: ${{matrix.arch}}
+          CIBW_BEFORE_BUILD: pip install oldest-supported-numpy
+
+      - name: Upload artifacts
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
+
+  upload_pypi:
+    needs: [build_wheels]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact   # prevents extra directory
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.8.6
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          verify-metadata: false
