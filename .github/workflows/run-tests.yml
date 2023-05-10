@@ -5,20 +5,22 @@ name: Run Tests
 run-name: Run Tests triggered by ${{ github.ref_type }} ${{ github.ref_name }} or ${{ github.triggering_actor }}
 
 on:
-  push:
-    branches: [ master ]
+  workflow_dispatch:
   pull_request:
+    branches: [ master ]
+  push:
     branches: [ master ]
   schedule:
     - cron: "40 11 * * 0"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    name: Test fpzip
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python-version: [ '3.8', '3.9', '3.10', '3.11' ]
         arch: [auto]
         include:
           - os: ubuntu-20.04

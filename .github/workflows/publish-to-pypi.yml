@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Set up QEMU
         if:  ${{ matrix.arch == 'aarch64' }}
@@ -43,7 +43,7 @@ jobs:
           CIBW_BEFORE_BUILD: pip install oldest-supported-numpy
 
       - name: Upload artifacts
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
 
