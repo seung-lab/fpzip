@@ -1,6 +1,14 @@
 CHANGES
 =======
 
+1.2.1
+-----
+
+* test: add py311 to test set
+* chore: bump version to 1.2.1
+* build: update github actions
+* docs: fix broken link to fpzip site
+
 1.2.0
 -----
 
