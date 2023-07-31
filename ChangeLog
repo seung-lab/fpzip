@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+1.2.2
+-----
+
+* release(1.2.2): fixes busted py310 universal2 wheel
+
 1.2.1
 -----
 

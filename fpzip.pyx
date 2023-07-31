@@ -53,7 +53,7 @@ cdef extern from "fpzip.h":
     fpzipErrorBadPrecision   = 5, # precision not supported 
     fpzipErrorBufferOverflow = 6  # compressed buffer overflow 
 
-  cdef fpzipError fpzip_errno = 0
+  cdef fpzipError fpzip_errno = fpzipSuccess
 
 class FpzipError(Exception):
   pass
