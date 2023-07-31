@@ -1,6 +1,8 @@
 CHANGES
 =======
 
+* fix: use enum instead of long
+
 1.2.2
 -----
 

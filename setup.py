@@ -45,7 +45,7 @@ setuptools.setup(
       'fpzip',
       sources=sources,
       language='c++',
-      include_dirs=[ join(fpzipdir, 'include'), NumpyImport() ],
+      include_dirs=[ join(fpzipdir, 'include'), str(NumpyImport()) ],
       extra_compile_args=extra_compile_args,
     )
   ],
