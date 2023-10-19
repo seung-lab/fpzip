@@ -12,7 +12,7 @@ name = "rms-fpzip"
 dynamic = ["version", "authors", "maintainers"]
 description = "Numpy wrapper for fpzip algorithm (P. Lindstrom & M. Isenburg, 2006) RMS Fork"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.7"
 dependencies = [
     "numpy",
 ]
