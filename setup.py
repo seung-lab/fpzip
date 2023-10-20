@@ -37,7 +37,7 @@ if prerelease_version == "release":
     prerelease_version = ""
 
 setuptools.setup(
-    setup_requires=['numpy'],
+    # setup_requires=['numpy'],
     python_requires="~=3.7", # >= 3.7 < 4.0
     ext_modules=[
       setuptools.Extension(

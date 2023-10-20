@@ -3,7 +3,6 @@ requires = [
     "setuptools",
     "setuptools_scm[toml]",
     "wheel",
-    "oldest-supported-numpy",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -14,7 +13,6 @@ description = "Numpy wrapper for fpzip algorithm (P. Lindstrom & M. Isenburg, 20
 readme = "README.md"
 requires-python = ">=3.7"
 dependencies = [
-    "oldest-supported-numpy",
 ]
 license = {text = "BSD"}
 classifiers = [
