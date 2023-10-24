@@ -36,10 +36,10 @@ classifiers = [
 ]
 
 [project.urls]
-homepage = "https://github.com/SETI/pds-fpzip"
-Repository = "https://github.com/SETI/pds-fpzip"
-Source = "https://github.com/SETI/pds-fpzip"
-Issues = "https://github.com/SETI/pds-fpzip/issues"
+homepage = "https://github.com/SETI/rms-fpzip"
+Repository = "https://github.com/SETI/rms-fpzip"
+Source = "https://github.com/SETI/rms-fpzip"
+Issues = "https://github.com/SETI/rms-fpzip/issues"
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
