@@ -12,10 +12,7 @@ on:
   workflow_dispatch:
 
 env:
-  # We have to skip *i686 because numpy doesn't currentl have pre-built wheels
-  # for Python 3.12 as of 10/20/2023. We could try adding it back later.
-  # See https://github.com/numpy/numpy/issues/24703
-  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* pp* *i686 *-musllinux*
+  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* pp* *-musllinux*
 
 jobs:
   build_wheels:
