@@ -1,11 +1,11 @@
 CHANGES
 =======
 
-* fix: use enum instead of long
-
 1.2.2
 -----
 
+* install: try immediately rendering NumpyImport as a string
+* fix: use enum instead of long
 * release(1.2.2): fixes busted py310 universal2 wheel
 
 1.2.1
