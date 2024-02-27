@@ -1,9 +1,12 @@
+[![GitHub release; latest by date](https://img.shields.io/github/v/release/SETI/rms-fpzip)](https://github.com/SETI/rms-fpzip/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date/SETI/rms-fpzip)](https://github.com/SETI/rms-fpzip/releases)
 [![Test Status](https://img.shields.io/github/actions/workflow/status/SETI/rms-fpzip/run-tests.yml?branch=main)](https://github.com/SETI/rms-fpzip/actions)
 [![Code coverage](https://img.shields.io/codecov/c/github/SETI/rms-fpzip/main?logo=codecov)](https://codecov.io/gh/SETI/rms-fpzip)
-[![GitHub Release Date](https://img.shields.io/github/release-date/SETI/rms-fpzip)](https://github.com/SETI/rms-fpzip/releases)
-[![GitHub release; latest by date](https://img.shields.io/github/v/release/SETI/rms-fpzip)](https://github.com/SETI/rms-fpzip/releases)
+<br />
 [![PyPI - Version](https://img.shields.io/pypi/v/rms-fpzip)](https://pypi.org/project/rms-fpzip)
+[![PyPI - Format](https://img.shields.io/pypi/format/rms-fpzip)](https://pypi.org/project/rms-fpzip)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/rms-fpzip)](https://pypi.org/project/rms-fpzip)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/rms-fpzip)](https://pypi.org/project/rms-fpzip)
 <br />
 [![GitHub commits since latest release](https://img.shields.io/github/commits-since/SETI/rms-fpzip/latest)](https://github.com/SETI/rms-fpzip/commits/main/)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/SETI/rms-fpzip)](https://github.com/SETI/rms-fpzip/commits/main/)
