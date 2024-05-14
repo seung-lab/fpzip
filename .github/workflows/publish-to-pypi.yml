@@ -6,7 +6,7 @@ on:
     types: [published]
 
 env:
-  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* pp* *-musllinux*
+  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* cp37-* pp* *-musllinux*
 
 jobs:
   build_wheels:
@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [ '3.7', '3.8', '3.9', '3.10', '3.11', '3.12' ]
+        python-version: [ '3.8', '3.9', '3.10', '3.11', '3.12' ]
         arch: [auto]
         include:
           - os: ubuntu-20.04
