@@ -1,7 +1,7 @@
 from libc.stdio cimport FILE, fopen, fwrite, fclose
 from libc.stdlib cimport calloc, free
 from libc.stdint cimport uint8_t
-from cpython cimport array 
+from cpython cimport array
 import array
 import sys
 
@@ -9,7 +9,7 @@ cimport numpy as numpy
 
 import numpy as np
 
-__VERSION__ = '1.2.0'
+__VERSION__ = '1.2.2'
 __version__ = __VERSION__
 
 FPZ_ERROR_STRINGS = [
@@ -32,11 +32,11 @@ cdef extern from "fpzip.h":
     int nf
 
   cdef FPZ* fpzip_read_from_file(FILE* file)
-  cdef FPZ* fpzip_read_from_buffer(void* buffer) 
+  cdef FPZ* fpzip_read_from_buffer(void* buffer)
   cdef int fpzip_read_header(FPZ* fpz)
   cdef size_t fpzip_read(FPZ* fpz, void* data)
   cdef void fpzip_read_close(FPZ* fpz)
-  
+
   cdef FPZ* fpzip_write_to_file(FILE* file)
   cdef FPZ* fpzip_write_to_buffer(void* buffer, size_t size)
   cdef int fpzip_write_header(FPZ* fpz)
@@ -44,15 +44,15 @@ cdef extern from "fpzip.h":
   cdef void fpzip_write_close(FPZ* fpz)
 
   ctypedef enum fpzipError:
-    fpzipSuccess             = 0, # no error 
-    fpzipErrorReadStream     = 1, # cannot read stream 
-    fpzipErrorWriteStream    = 2, # cannot write stream 
-    fpzipErrorBadFormat      = 3, # magic mismatch; not an fpz stream 
-    fpzipErrorBadVersion     = 4, # fpz format version not supported 
-    fpzipErrorBadPrecision   = 5, # precision not supported 
-    fpzipErrorBufferOverflow = 6  # compressed buffer overflow 
+    fpzipSuccess             = 0, # no error
+    fpzipErrorReadStream     = 1, # cannot read stream
+    fpzipErrorWriteStream    = 2, # cannot write stream
+    fpzipErrorBadFormat      = 3, # magic mismatch; not an fpz stream
+    fpzipErrorBadVersion     = 4, # fpz format version not supported
+    fpzipErrorBadPrecision   = 5, # precision not supported
+    fpzipErrorBufferOverflow = 6  # compressed buffer overflow
 
-  cdef fpzipError fpzip_errno = 0
+  cdef fpzipError fpzip_errno = fpzipSuccess
 
 class FpzipError(Exception):
   pass
@@ -84,7 +84,7 @@ def compress(data, precision=0, order='C'):
   precision indicates the number of bits to truncate. Any value above
   zero indicates a lossy operation.
 
-  order is 'C' or 'F' (row major vs column major memory layout) and 
+  order is 'C' or 'F' (row major vs column major memory layout) and
   should correspond to the underlying orientation of the input array.
   """
   if data.dtype not in (np.float32, np.float64):
@@ -149,10 +149,10 @@ def compress(data, precision=0, order='C'):
     fpzip_write_close(fpz_ptr)
     if data.dtype == np.float32:
       bufviewf = compression_buf
-      bytes_out = bytearray(bufviewf[:header_bytes])  
+      bytes_out = bytearray(bufviewf[:header_bytes])
     else:
       bufviewd = compression_buf
-      bytes_out = bytearray(bufviewd[:header_bytes])  
+      bytes_out = bytearray(bufviewd[:header_bytes])
     del compression_buf
     return bytes(bytes_out)
 
@@ -169,7 +169,7 @@ def compress(data, precision=0, order='C'):
 
   del compression_buf
   fpzip_write_close(fpz_ptr)
-  
+
   if outbytes == 0:
     raise FpzipWriteError("Compression failed. %s" % FPZ_ERROR_STRINGS[fpzip_errno])
 
@@ -179,17 +179,17 @@ def decompress(bytes encoded, order='C'):
   """
   fpzip.decompress(encoded, order='C')
 
-  Accepts an fpzip encoded bytestring (e.g. b'fpy)....') and 
+  Accepts an fpzip encoded bytestring (e.g. b'fpy)....') and
   returns the original array as a 4d numpy array.
 
-  order is 'C' or 'F' (row major vs column major memory layout) and 
+  order is 'C' or 'F' (row major vs column major memory layout) and
   should correspond to the byte order of the originally compressed
   array.
   """
   order = validate_order(order)
 
   # line below necessary to convert from PyObject to a naked pointer
-  cdef unsigned char *encodedptr = <unsigned char*>encoded 
+  cdef unsigned char *encodedptr = <unsigned char*>encoded
   cdef FPZ* fpz_ptr = fpzip_read_from_buffer(<void*>encodedptr)
 
   if fpzip_read_header(fpz_ptr) == 0:
@@ -219,5 +219,3 @@ def decompress(bytes encoded, order='C'):
     return np.frombuffer(buf, dtype=dtype).reshape( (nx, ny, nz, nf), order='F')
   else:
     raise ValueError(f"Undefined order parameter '{order}'. Options are 'C' or 'F'")
-
-

@@ -14,7 +14,7 @@ on:
     - cron: "40 11 * * 0"
 
 env:
-  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* cp37-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* pp312* *-musllinux*
+  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* cp37-* cp38-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* pp312* *-musllinux*
 
 jobs:
   test:
@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [ '3.8', '3.9', '3.10', '3.11', '3.12' ]
+        python-version: [ '3.9', '3.10', '3.11', '3.12' ]
         arch: [auto]
         include:
           - os: ubuntu-20.04
