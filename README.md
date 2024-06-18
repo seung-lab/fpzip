@@ -32,7 +32,8 @@ This fork is maintained by the Ring-Moon Systems Node of NASA's Planetary Data S
 
 # fpzip
 
-fpzip is a compression algorithm supporting lossless and lossy encoding for up to 4 dimensional floating point data. This package contains Python C++ bindings for the fpzip algorithm (version 1.3.0). The version number for this package is independent. Python 3.8+ is supported.
+fpzip is a compression algorithm supporting lossless and lossy encoding for up to 4 dimensional floating point data. This package contains Python C++ bindings for the fpzip algorithm (version 1.3.0). The version number for this package is independent. Python 3.9+ is supported. This
+package works with both NumPy 1.x and 2.x.
 
 ```python
 import fpzip
