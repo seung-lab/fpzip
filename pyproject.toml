@@ -14,7 +14,7 @@ description = "Numpy wrapper for fpzip algorithm (P. Lindstrom & M. Isenburg, 20
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-  "numpy>=2",
+  "numpy",
 ]
 license = {text = "BSD"}
 classifiers = [
