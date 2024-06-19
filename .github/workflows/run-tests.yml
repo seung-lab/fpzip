@@ -13,9 +13,6 @@ on:
   schedule:
     - cron: "40 11 * * 0"
 
-env:
-  CIBW_SKIP: cp27-* cp33-* cp34-* cp35-* cp36-* cp37-* cp38-* pp27* pp36* pp37* pp38* pp39* pp310* pp311* pp312* *-musllinux*
-
 jobs:
   test:
     name: Test fpzip
