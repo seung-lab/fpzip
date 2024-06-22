@@ -39,7 +39,7 @@ else:
 
 setuptools.setup(
   setup_requires=['pbr', 'numpy','cython'],
-  python_requires=">=3.7,<4.0", # >= 3.6 < 4.0
+  python_requires=">=3.8,<4.0",
   ext_modules=[
     setuptools.Extension(
       'fpzip',
