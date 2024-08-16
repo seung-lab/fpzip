@@ -126,3 +126,14 @@ def test_basic_conformation():
   assert np.all(
     fpzip.decompress(six_fpz) == fpzip.decompress(compressed)[0,:,:,:]
   )
+
+def test_oversize_compression():
+  # This array compresses to a larger size than the input array
+  # This test ensures that compressing this array does not lead to buffer
+  # overflows
+  arr = np.array([1e-12, 0, 1e-12])
+  compressed = fpzip.compress(arr)
+  assert np.all(
+    fpzip.decompress(compressed).flatten() == arr
+  )
+
