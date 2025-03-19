@@ -127,6 +127,15 @@ def test_basic_conformation():
     fpzip.decompress(six_fpz) == fpzip.decompress(compressed)[0,:,:,:]
   )
 
+def test_oversize_compression():
+  # This array compresses to a larger size than the input array
+  # This test ensures that compressing this array does not lead to buffer
+  # overflows
+  arr = np.array([1e-12, 0, 1e-12])
+  compressed = fpzip.compress(arr)
+  assert np.all(
+    fpzip.decompress(compressed).flatten() == arr
+  )
 
 @pytest.mark.parametrize("dtype", [np.float32, np.float64])
 def test_buffer_overflow(dtype):

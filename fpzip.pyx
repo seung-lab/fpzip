@@ -88,6 +88,26 @@ def compress(data, precision=0, order='C'):
   order is 'C' or 'F' (row major vs column major memory layout) and 
   should correspond to the underlying orientation of the input array.
   """
+  MAX_ATTEMPTS = 5
+  BUFFER_GROWTH_FACTOR = 1.5
+  # Occasionally the fpzip compression algorithm produces larger 'compressed'
+  # representation than the size of the input data array (particularly for very 
+  # short input arrays) so we gradually grow the compression buffer if a buffer 
+  # size of `data.nbytes` is insufficient.
+  buffer_size = data.nbytes
+  for i in range(MAX_ATTEMPTS):
+    try:
+      return _try_compress(data, buffer_size, precision=precision, order=order)
+    except:
+      # Only increase the buffer size if the exception was caused by buffer 
+      # overflow and we aren't on our final iteration.
+      if fpzip_errno == fpzipErrorBufferOverflow and i < (MAX_ATTEMPTS - 1):
+        buffer_size = int(BUFFER_GROWTH_FACTOR * buffer_size)
+        continue
+      else:
+        raise
+
+def _try_compress(data, buffer_size, precision, order):
   if data.dtype not in (np.float32, np.float64):
     raise ValueError("Data type {} must be a floating type.".format(data.dtype))
 
@@ -102,19 +122,18 @@ def compress(data, precision=0, order='C'):
   if not data.flags['C_CONTIGUOUS'] and not data.flags['F_CONTIGUOUS']:
     data = np.copy(data, order=order)
 
-  header_bytes = 28 # read.cpp:fpzip_read_header + 4 for some reason
+  header_bytes = 24 # read.cpp:fpzip_read_header
 
   cdef char fptype = b'f' if data.dtype == np.float32 else b'd'
 
   # some compressed data can be bigger than the original data
-  extra_fraction = 1.25
-  cdef array.array compression_buf = allocate(fptype, int(extra_fraction * data.size) + header_bytes)
+  cdef array.array compression_buf = allocate(fptype, data.size + header_bytes)
 
   cdef FPZ* fpz_ptr
   if fptype == b'f':
-    fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_floats, int(extra_fraction * data.nbytes) + header_bytes)
+    fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_floats, buffer_size + header_bytes)
   else:
-    fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_doubles, int(extra_fraction * data.nbytes) + header_bytes)
+    fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_doubles, buffer_size + header_bytes)
 
   if data.dtype == np.float32:
     fpz_ptr[0].type = 0 # float
