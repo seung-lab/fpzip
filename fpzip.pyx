@@ -105,13 +105,16 @@ def compress(data, precision=0, order='C'):
   header_bytes = 28 # read.cpp:fpzip_read_header + 4 for some reason
 
   cdef char fptype = b'f' if data.dtype == np.float32 else b'd'
-  cdef array.array compression_buf = allocate(fptype, data.size + header_bytes)
+
+  # some compressed data can be bigger than the original data
+  extra_fraction = 1.25
+  cdef array.array compression_buf = allocate(fptype, int(extra_fraction * data.size) + header_bytes)
 
   cdef FPZ* fpz_ptr
   if fptype == b'f':
-    fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_floats, data.nbytes + header_bytes)
+    fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_floats, int(extra_fraction * data.nbytes) + header_bytes)
   else:
-    fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_doubles, data.nbytes + header_bytes)
+    fpz_ptr = fpzip_write_to_buffer(compression_buf.data.as_doubles, int(extra_fraction * data.nbytes) + header_bytes)
 
   if data.dtype == np.float32:
     fpz_ptr[0].type = 0 # float
