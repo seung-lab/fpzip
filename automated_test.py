@@ -137,3 +137,23 @@ def test_oversize_compression():
     fpzip.decompress(compressed).flatten() == arr
   )
 
+@pytest.mark.parametrize("dtype", [np.float32, np.float64])
+def test_buffer_overflow(dtype):
+  # This data compresses to be larger than the input
+  x = np.array([
+    0.1376666,  0.1400608,  0.1328782,  0.1352724,  0.1340753,  0.130484,
+    0.1340753,  0.1352724,  0.1400608,  0.12808979, 0.12689269, 0.12210429,
+    0.12928689, 0.1448492,  0.1412579,  0.12449849, 0.1316811,  0.1316811,
+    0.130484,   0.1388637,  0.130484,   0.1388637,  0.130484,   0.1448492,
+    0.12808979, 0.12689269, 0.1400608,  0.12569559, 0.11611878, 0.1328782,
+    0.12928689, 0.1340753,  0.12090719, 0.12569559, 0.12210429, 0.12569559,
+    0.12330139, 0.11611878, 0.1340753,  0.12330139, 0.1352724,  0.130484,
+    0.1376666,  0.12449849, 0.12449849, 0.12569559, 0.12090719, 0.12569559,
+    0.12330139, 0.12689269, 0.12689269
+  ], dtype=dtype)
+
+  x[1:] = np.diff(x)  # transform to array of deltas based off first item (I think, I'm crap with numpy)
+  y = fpzip.compress(x)
+  print(len(y))
+  print(x.nbytes)
+

@@ -10,7 +10,7 @@ cimport numpy as numpy
 
 import numpy as np
 
-__VERSION__ = '1.2.3'
+__VERSION__ = '1.2.5'
 __version__ = __VERSION__
 
 FPZ_ERROR_STRINGS = [
@@ -125,6 +125,8 @@ def _try_compress(data, buffer_size, precision, order):
   header_bytes = 24 # read.cpp:fpzip_read_header
 
   cdef char fptype = b'f' if data.dtype == np.float32 else b'd'
+
+  # some compressed data can be bigger than the original data
   cdef array.array compression_buf = allocate(fptype, data.size + header_bytes)
 
   cdef FPZ* fpz_ptr
